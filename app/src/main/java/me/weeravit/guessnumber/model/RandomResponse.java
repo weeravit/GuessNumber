@@ -18,6 +18,27 @@ public class RandomResponse {
     @Expose
     private Integer id;
 
+    public boolean isCorrect(int guessNumber) {
+        if (result.getRandom().getData().get(0) == guessNumber) {
+            return true;
+        }
+        return false;
+    }
+
+    public int getResultNumber() {
+        return result.getRandom().getData().get(0);
+    }
+
+    public String getMessageResult(int guessNumber) {
+        if (guessNumber > getResultNumber()) {
+            return "Your guess is " + guessNumber + " greater than result!";
+        } else if (guessNumber < getResultNumber()) {
+            return "Your guess is " + guessNumber + " less than result!";
+        } else {
+            return "Winner!";
+        }
+    }
+
     public String getJsonrpc() {
         return jsonrpc;
     }

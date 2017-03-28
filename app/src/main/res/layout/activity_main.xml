@@ -8,19 +8,39 @@
 
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/edt_guess"
-        android:hint="Please input number for guess"
-        android:gravity="center"
-        android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:hint="Please input number for guess" />
 
-   <android.support.v7.widget.AppCompatButton
-       android:layout_below="@id/edt_guess"
-       android:layout_marginTop="8dp"
-       android:id="@+id/btn_confirm"
-       android:text="Guess"
-       android:layout_centerInParent="true"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edt_guess"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="8dp"
+        android:text="Guess" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_result_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/edt_guess"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="40dp"
+        android:text="Ready to guess!"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/pgb_loading"
+        android:visibility="gone"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_above="@id/text_result_message"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp" />
 
 </RelativeLayout>

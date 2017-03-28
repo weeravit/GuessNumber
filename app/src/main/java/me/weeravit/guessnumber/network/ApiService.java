@@ -13,7 +13,7 @@ import retrofit2.http.POST;
 
 public interface ApiService {
 
-    @POST("/")
+    @POST("invoke")
     @Headers("Content-Type: application/json-rpc")
     Call<RandomResponse> getRandomNumber(@Body RandomRequest randomRequest);
 

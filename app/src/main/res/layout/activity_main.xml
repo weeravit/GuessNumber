@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:inputType="number"
         android:gravity="center"
-        android:hint="Please input number for guess" />
+        android:hint="@string/please_input_number_for_guess" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_confirm"
@@ -21,7 +22,7 @@
         android:layout_below="@id/edt_guess"
         android:layout_centerInParent="true"
         android:layout_marginTop="8dp"
-        android:text="Guess" />
+        android:text="@string/btn_guess" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_result_message"
@@ -30,7 +31,7 @@
         android:layout_above="@id/edt_guess"
         android:layout_centerInParent="true"
         android:layout_marginBottom="40dp"
-        android:text="Ready to guess!"
+        android:text="@string/ready_to_guess"
         android:textSize="18sp"
         android:textStyle="bold" />
 

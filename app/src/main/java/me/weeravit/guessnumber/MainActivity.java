@@ -1,6 +1,8 @@
 package me.weeravit.guessnumber;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatEditText mEdtGuess;
     private AppCompatButton mBtnGuess;
     private AppCompatTextView mTextResultMessage;
+    private RandomResponse mRandomResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initView();
+        getRandomNumberByApi();
     }
 
     private void initView() {
@@ -38,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mBtnGuess.setOnClickListener(onBtnGuessClicked);
     }
 
-    private void getRandomNumberByApi(final int guessNumber) {
+    private void getRandomNumberByApi() {
         mProgressBar.setVisibility(View.VISIBLE);
 
         HttpManager.getInstance()
@@ -46,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new Callback<RandomResponse>() {
                     @Override
                     public void onResponse(Call<RandomResponse> call, Response<RandomResponse> response) {
-                        RandomResponse randomResponse = response.body();
-
-                        mProgressBar.setVisibility(View.GONE);
-                        mTextResultMessage.setText(randomResponse.getMessageResult(guessNumber));
+                        if (!isFinishing()) {
+                            mRandomResponse = response.body();
+                            mProgressBar.setVisibility(View.GONE);
+                        }
                     }
 
                     @Override
@@ -62,8 +66,27 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener onBtnGuessClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            int guessNumber = Integer.parseInt(mEdtGuess.getText().toString());
-            getRandomNumberByApi(guessNumber);
+            if (mRandomResponse != null) {
+                int guessNumber = Integer.parseInt(mEdtGuess.getText().toString());
+                String messageResult = mRandomResponse.getMessageResult(guessNumber);
+
+                if (mRandomResponse.isCorrect(guessNumber)) {
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setMessage(messageResult)
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    getRandomNumberByApi();
+                                    mTextResultMessage.setText(getString(R.string.ready_to_guess));
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create()
+                            .show();
+                } else {
+                    mTextResultMessage.setText(messageResult);
+                }
+            }
         }
     };
 }

@@ -25,6 +25,7 @@ public class HttpManager {
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
         mService = retrofit.create(ApiService.class);
     }
 

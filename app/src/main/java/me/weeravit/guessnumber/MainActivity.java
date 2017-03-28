@@ -1,7 +1,10 @@
 package me.weeravit.guessnumber;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -18,11 +21,11 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ProgressBar mProgressBar;
     private AppCompatEditText mEdtGuess;
     private AppCompatButton mBtnGuess;
     private AppCompatTextView mTextResultMessage;
     private RandomResponse mRandomResponse;
+    private ProgressDialog mProgressLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +33,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initView();
+        initInstance();
         getRandomNumberByApi();
     }
 
+    private void initInstance() {
+        mProgressLoading = new ProgressDialog(this);
+        mProgressLoading.setMessage("Requesting Random number");
+        mProgressLoading.setIndeterminate(true);
+        mProgressLoading.setCancelable(false);
+    }
+
     private void initView() {
-        mProgressBar = (ProgressBar) findViewById(R.id.pgb_loading);
         mEdtGuess = (AppCompatEditText) findViewById(R.id.edt_guess);
         mBtnGuess = (AppCompatButton) findViewById(R.id.btn_confirm);
         mTextResultMessage = (AppCompatTextView) findViewById(R.id.text_result_message);
@@ -43,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getRandomNumberByApi() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressLoading.show();
 
         HttpManager.getInstance()
                 .getRandomNumber()
@@ -52,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Call<RandomResponse> call, Response<RandomResponse> response) {
                         if (!isFinishing()) {
                             mRandomResponse = response.body();
-                            mProgressBar.setVisibility(View.GONE);
+                            mProgressLoading.dismiss();
                         }
                     }
 
